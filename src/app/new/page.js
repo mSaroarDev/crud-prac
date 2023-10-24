@@ -1,5 +1,6 @@
 "use client";
 import { useFormik } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Button from "react-bootstrap/Button";
@@ -14,7 +15,7 @@ const New = () => {
     },
 
     onSubmit: async (values, { resetForm }) => {
-      const res = await fetch("http://localhost:3000/new", {
+      const res = await fetch("http://localhost:3000/api/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +23,7 @@ const New = () => {
         body: JSON.stringify(values),
       });
 
-      if (res.status === 200) {
+      if (res.status === 201) {
         router.refresh();
         alert("Data added");
         resetForm();
@@ -33,26 +34,31 @@ const New = () => {
   });
 
   return (
-    <div className="center">
-      <div>
-        <Form onSubmit={formik.handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              id="name"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.onChange}
-              placeholder="Enter Name"
-            />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Add to list
-          </Button>
-        </Form>
+    <>
+      <div className="center">
+        <div>
+          <Form onSubmit={formik.handleSubmit}>
+            <Form.Group className="mb-3" controlId="name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                placeholder="Enter Name"
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Add to list
+            </Button>{" "}
+            <br />
+            <Link className="mt-5 d-inline" href={"/list"}>
+              List
+            </Link>
+          </Form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
